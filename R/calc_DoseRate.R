@@ -1,7 +1,7 @@
 #' Calculate the dose rate from a spectrum
 #'
-#' @param data 
-#' @param energy.min 
+#' @param data input data
+#' @param energy.min starting energy in eV
 #' @param ... 
 #'
 #' @return

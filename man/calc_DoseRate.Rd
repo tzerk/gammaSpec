@@ -4,12 +4,12 @@
 \alias{calc_DoseRate}
 \title{Calculate the dose rate from a spectrum}
 \usage{
-calc_DoseRate(data, energy.min = get_EnergyThreshold(), ...)
+calc_DoseRate(data, energy.min = get_EnergyThreshold(), plot = TRUE, ...)
 }
 \arguments{
-\item{data}{}
+\item{data}{input data}
 
-\item{energy.min}{}
+\item{energy.min}{starting energy in eV}
 
 \item{...}{}
 }
