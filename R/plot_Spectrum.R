@@ -1,3 +1,31 @@
+#' Plot gamma spectrum
+#' 
+#' <placeholder>
+#' 
+#' <placeholder>
+#'
+#' @param data \code{\link{list}} \bold{required}: data object produced by 
+#' \code{\link{read_SPE}}.
+#' 
+#' @param type \code{\link{character}} (with default): 
+#' 
+#' @param xval \code{\link{character}} (with default):
+#'  
+#' @param yval \code{\link{character}} (with default):
+#'  
+#' @param info \code{\link{character}} (with default):
+#'  
+#' @param fill \code{\link{character}} (with default):
+#'  
+#' @param ... currently not used.
+#'
+#' @return
+#'
+#' @examples
+#' 
+#' # none available yet
+#' 
+#' @export 
 plot_Spectrum <- function(data,
                           type = c("bar", "line", "point"),
                           xval = c("energy", "channel"), 
@@ -49,6 +77,5 @@ plot_Spectrum <- function(data,
   # add polygon fill
   if (fill)
     polygon(settings$x, pmin(settings$y), col = settings$col, border = NA)
-  
   
 }
