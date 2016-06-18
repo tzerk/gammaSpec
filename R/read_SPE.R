@@ -1,3 +1,20 @@
+#' Import SPE files to R
+#' 
+#' <placeholder>
+#' 
+#' <placeholder>
+#'
+#' @param file \code{\link{character}} \bold{required}: file path
+#' @param ... currently not used.
+#'
+#' @return
+#' 
+#'
+#' @examples
+#' 
+#' # none available yet
+#' 
+#' @export
 read_SPE <- function(file, ...) {
   
   # Read file line by line
