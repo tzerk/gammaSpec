@@ -31,3 +31,10 @@ get_Keywords <- function() {
   c("SPEC_ID", "SPEC_REM", "DATE_MEA", "MEAS_TIM", "DATA", "ROI", 
     "PRESETS", "ENER_FIT", "MCA_CAL", "SHAPE_CAL")
 }
+
+
+## BACKGROUND MEASUREMENT ---
+get_SpecBackground <- function() {
+  fpath <- system.file("extdata", "background_spectrum.spe", package="gammaSpec")
+  read_SPE(fpath)
+}

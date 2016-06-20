@@ -2,7 +2,9 @@
 #'
 #' @param data input data
 #' @param energy.min starting energy in eV
-#' @param ... 
+#' @param background.correction subtract background
+#' @param plot plot
+#' @param ... currently not used
 #'
 #' @return
 #'
@@ -11,7 +13,10 @@
 #' # none available yet
 #' 
 #' @export
-calc_DoseRate <- function(data, energy.min = get_EnergyThreshold(), plot = TRUE, ...) {
+calc_DoseRate <- function(data, 
+                          energy.min = get_EnergyThreshold(), 
+                          background.correction = TRUE, 
+                          plot = TRUE, ...) {
   
   ## FETCH DATA ----
   # reformat the measured data
@@ -24,14 +29,21 @@ calc_DoseRate <- function(data, energy.min = get_EnergyThreshold(), plot = TRUE,
   spec_calib <- data.frame(energy = data_calib$DATA$energy,
                            counts_norm = data_calib$DATA$counts_norm)
   
+  # get the background spectrum
+  data_bg <- get_SpecBackground()
+  spec_bg <- data.frame(energy = data_bg$DATA$energy,
+                        counts_norm = data_bg$DATA$counts_norm)
+  
   # determine the highest common energy to cut of the data
   highest_common_energy <- min(c(spec_measured$energy[length(spec_measured$energy)], 
-                                 spec_calib$energy[length(spec_calib$energy)]))
+                                 spec_calib$energy[length(spec_calib$energy)],
+                                 spec_bg$energy[length(spec_bg$energy)]))
   energyIndex_max_measured <- which.min(abs(spec_measured$energy - highest_common_energy))
   
   # determine the lowest common energy to cut of the data
   lowest_common_energy <- max(c(spec_measured$energy[1],
-                                spec_calib$energy[1]))
+                                spec_calib$energy[1],
+                                spec_bg$energy[1]))
   energyIndex_min_measured <- which.min(abs(spec_measured$energy - lowest_common_energy))
   
   
@@ -44,6 +56,20 @@ calc_DoseRate <- function(data, energy.min = get_EnergyThreshold(), plot = TRUE,
     energyIndex_max_calib <- which.min(abs(spec_calib$energy - highest_common_energy))
     sum(spec_calib$counts_norm[energyIndex_min_calib:energyIndex_max_calib])
   })
+  
+  # calculate the cumulative counts of the background spectrum
+  if (background.correction) {
+    
+    sumCounts_bg_continous <- sapply(spec_measured$energy[energyIndex_min_measured:energyIndex_max_measured], function(x) {
+      energyIndex_min_bg <- which.min(abs(spec_bg$energy - x))
+      energyIndex_max_bg <- which.min(abs(spec_bg$energy - highest_common_energy))
+      sum(spec_bg$counts_norm[energyIndex_min_bg:energyIndex_max_bg])
+    })
+    
+    sumCounts_measured_continous <- sumCounts_measured_continous - sumCounts_bg_continous
+    sumCounts_calib_continous <- sumCounts_calib_continous - sumCounts_bg_continous
+    
+  }
   
   ## CALCULATE DOSE RATE ----
   
@@ -76,13 +102,17 @@ calc_DoseRate <- function(data, energy.min = get_EnergyThreshold(), plot = TRUE,
     
     # plot original spectrum
     plot_Spectrum(data, type = "line", info = FALSE, cex = 0.8,
-                  main = "Measured Spectrum")
+                  main = "Gamma Spectrum")
     abline(v = c(energy.min, highest_common_energy), lty = 2)
+    
+    mtext("Measured", cex = 0.9, line = 0.3)
     
     # plot reference calibration spectrum
     plot_Spectrum(data_calib, type = "line", info = FALSE, cex = 0.8,
-                  main = "Calibration Spectrum")
+                  main = "Gamma Spectrum")
     abline(v = c(energy.min, highest_common_energy), lty = 2)
+    
+    mtext("Calibration", cex = 0.9, line = 0.3)
     
     # Empirical cumulative distribution
     plot(ecdf(spec_measured$counts_norm[which.min(abs(spec_measured$energy - energy.min)):
@@ -90,48 +120,58 @@ calc_DoseRate <- function(data, energy.min = get_EnergyThreshold(), plot = TRUE,
          verticals = TRUE, do.points = FALSE,
          main = "Empirical Cumulative Distribution")
     
+    mtext("Measured", cex = 0.9, line = 0.3)
+    
     plot(ecdf(spec_calib$counts_norm[which.min(abs(spec_calib$energy - energy.min)):
                                        which.min(abs(spec_calib$energy - highest_common_energy))]), 
          verticals = TRUE, do.points = FALSE,
          main = "Empirical Cumulative Distribution")
     
+    mtext("Calibration", cex = 0.9, line = 0.3)
+    
     # Linear fit
     df <- data.frame(x = c(0, results$counts_calib[which.min(abs(results$energy - energy.min))]), 
                            y = c(0, doseRate_calib))
+    
     plot(df, pch = 16, col = "red", 
          xlim = range(pretty(c(0, results$counts_measured[which.min(abs(results$energy - energy.min))]))),
          ylim = range(pretty(c(0, doseRate))),
-         ylab = "Dose rate (Gy/s)",
+         ylab = "Fitted dose rate (Gy/s)",
          xlab = "Count rate (1/s)",
          cex = 1.5,
          main = "Dose rate calibration line")
     
-    abline(lm(y ~ x, df), lty = 1)
+    abline(lm(y ~ x, df), lty = 2)
     
     points(results$counts_measured[which.min(abs(results$energy - energy.min))],
            doseRate, 
            pch = 16, col = "darkgreen", cex = 1.5)
     
-    arrows(x0 = results$counts_measured[which.min(abs(results$energy - energy.min))],
-           x1 = 0,
-           y0 = doseRate,
-           y1 = doseRate, 
-           length = 0.25, lty = 2)
+    lines(c(results$counts_measured[which.min(abs(results$energy - energy.min))], 0),
+           c(doseRate, doseRate), 
+          lty = 1)
     
     lines(c(results$counts_measured[which.min(abs(results$energy - energy.min))],
             results$counts_measured[which.min(abs(results$energy - energy.min))]),
           c(0, doseRate),
-          lty = 2)
+          lty = 1)
     
-    mtext(paste("Dose rate:", round(doseRate, 2), "\u00B1", round(doseRate / 10, 2), "Gy/s"), cex = 0.9)
+    mtext(paste("Fitted dose rate:", round(doseRate, 2), "\u00B1", round(doseRate / 10, 2), "Gy/s"), line = 0.3, cex = 0.8)
+    
+    legend("left", legend = c("Calibration", "Measured"), pt.cex = 1.5, y.intersp = 0.25, 
+           pch = c(16, 16), col = c("red", "darkgreen"),  bty = "n")
     
     # continous dose rate plot
-    plot(results$energy, results$doserate, type = "s")
+    plot(results$energy, 
+         results$doserate, 
+         type = "s", main = "Continous dose rate estimation",
+         xlab = "Lower threshold energy (keV)",
+         ylab = "Dose rate (Gy/ka)")
     
-    lines(c(results$energy[which.min(abs(results$energy - energy.min))],
-            results$energy[which.min(abs(results$energy - energy.min))]),
-          c(0, doseRate),
-          lty = 1, col = "red")
+    arrows(x0 = results$energy[which.min(abs(results$energy - energy.min))],
+           x1 = results$energy[which.min(abs(results$energy - energy.min))],
+          y0 = 0, y1 = doseRate,
+          lty = 1, col = "red", length = 0.15)
     
     
   }
