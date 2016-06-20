@@ -20,7 +20,7 @@ get_EnergyThreshold <- function() {
 
 # This is the dose rate of the reference spectrum used for calibration
 get_SpecDoseRate <- function() {
-  1.0
+  2.208
 }
 
 ## MISCALLENOUS ----
