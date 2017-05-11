@@ -31,7 +31,7 @@ plot_Spectrum <- function(data,
                           xval = c("energy", "channel"), 
                           yval = c("rate", "count"),
                           info = TRUE,
-                          fill = TRUE,
+                          fill = FALSE,
                           ...) {
   
   ## plot parameters
@@ -55,7 +55,8 @@ plot_Spectrum <- function(data,
                    col = "grey50",
                    cex = 0.9,
                    bty = "o",
-                   pch = 16)
+                   pch = 16,
+                   log = "y")
   
   settings <- modifyList(settings, list(...))
   
@@ -71,7 +72,7 @@ plot_Spectrum <- function(data,
     labels <- lapply(info, function(x) paste(x, collapse = ", "))
     labels <- paste0(paste0(names(labels), ": \n ", unlist(labels)), collapse = "\n")
     
-    text(x = mean(settings$x) * 0.33, y = max(settings$y) * 0.75, labels = labels, cex = 0.7 * settings$cex, adj = 0)
+    text(x = grconvertX(0.05, from = "npc"), y = grconvertY(0.3, from = "npc"), labels = labels, cex = 0.7 * settings$cex, adj = 0)
   }
   
   # add polygon fill
