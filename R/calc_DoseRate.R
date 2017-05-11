@@ -2,8 +2,10 @@
 #'
 #' @param data input data
 #' @param energy.min starting energy in eV
+#' @param energy.max upper integration limit (not implemented)
 #' @param background.correction subtract background
 #' @param plot plot
+#' @param plot.single single plots
 #' @param ... currently not used
 #'
 #' @return
@@ -14,9 +16,12 @@
 #' 
 #' @export
 calc_DoseRate <- function(data, 
-                          energy.min = get_EnergyThreshold(), 
+                          energy.min = get_EnergyThreshold(),
+                          energy.max = NULL,
                           background.correction = TRUE, 
-                          plot = TRUE, ...) {
+                          plot = TRUE,
+                          plot.single = TRUE,
+                          ...) {
   
   ## FETCH DATA ----
   # reformat the measured data
@@ -39,6 +44,11 @@ calc_DoseRate <- function(data,
   highest_common_energy <- min(c(spec_measured$energy[length(spec_measured$energy)], 
                                  spec_calib$energy[length(spec_calib$energy)],
                                  spec_bg$energy[length(spec_bg$energy)]))
+  
+  if (!is.null(energy.max))
+    if (energy.max < highest_common_energy)
+      highest_common_energy <- energy.max
+  
   energyIndex_max_measured <- which.min(abs(spec_measured$energy - highest_common_energy))
   
   # determine the lowest common energy to cut of the data
@@ -57,22 +67,20 @@ calc_DoseRate <- function(data,
     sum(spec_calib$counts_norm[energyIndex_min_calib:energyIndex_max_calib])
   })
   
+  sumCounts_bg_continous <- sapply(spec_measured$energy[energyIndex_min_measured:energyIndex_max_measured], function(x) {
+    energyIndex_min_bg <- which.min(abs(spec_bg$energy - x))
+    energyIndex_max_bg <- which.min(abs(spec_bg$energy - highest_common_energy))
+    sum(spec_bg$counts_norm[energyIndex_min_bg:energyIndex_max_bg])
+  })
   
   ## ERROR CALCULATION: SPECTRA ----
   sumCounts_calib_continous_error <- sqrt(sumCounts_calib_continous * data_calib$MEAS_TIM$live) / data_calib$MEAS_TIM$live
   sumCounts_measured_continous_error <- sqrt(sumCounts_measured_continous * data$MEAS_TIM$live) / data$MEAS_TIM$live
+  sumCounts_bg_continous_error <- sqrt(sumCounts_bg_continous * data_bg$MEAS_TIM$live) / data_bg$MEAS_TIM$live
+  
   
   ## BACKGROUND CORRECTION ----
   if (background.correction) {
-    
-    # sum counts (BG)
-    sumCounts_bg_continous <- sapply(spec_measured$energy[energyIndex_min_measured:energyIndex_max_measured], function(x) {
-      energyIndex_min_bg <- which.min(abs(spec_bg$energy - x))
-      energyIndex_max_bg <- which.min(abs(spec_bg$energy - highest_common_energy))
-      sum(spec_bg$counts_norm[energyIndex_min_bg:energyIndex_max_bg])
-    })
-    # sum counts error (BG)
-    sumCounts_bg_continous_error <- sqrt(sumCounts_bg_continous * data_bg$MEAS_TIM$live) / data_bg$MEAS_TIM$live
     
     # subtract BG from MEAS and CALIB spectrum
     sumCounts_measured_continous <- sumCounts_measured_continous - sumCounts_bg_continous
@@ -109,8 +117,8 @@ calc_DoseRate <- function(data,
   
   # combine energy and dose rate values
   results <- data.frame(energy = spec_measured$energy[energyIndex_min_measured:energyIndex_max_measured],
-                        doserate = doseRate_continous$doseRate,
-                        doserate_error = doseRate_continous$doseRate_error,
+                        doserate_continous = doseRate_continous$doseRate,
+                        doserate_continous_error = doseRate_continous$doseRate_error,
                         counts_measured = sumCounts_measured_continous,
                         counts_measured_error = sumCounts_measured_continous_error,
                         counts_calib = sumCounts_calib_continous,
@@ -119,51 +127,73 @@ calc_DoseRate <- function(data,
                         counts_bg_error = sumCounts_bg_continous_error)
   
   # get the dose rate derived from the desired energy threshold
-  doseRate <- results$doserate[which.min(abs(results$energy - energy.min))]
-  doseRate_error <- results$doserate_error[which.min(abs(results$energy - energy.min))]
+  doseRate <- results$doserate_continous[which.min(abs(results$energy - energy.min))]
+  doseRate_error <- results$doserate_continous_error[which.min(abs(results$energy - energy.min))]
   
   ## PLOTTING ----
   if (plot) {
     
-    # set graphical parameters (2x2 plot area)
-    par(mfrow = c(3, 2))
+    # set graphical parameters (3x1 plot area)
+    if (!plot.single) {
+      par(mar = c(5, 14, 4, 14) + 0.1)
+      par(mfrow = c(3, 1))
+    } 
     
-    # plot original spectrum
-    plot_Spectrum(data, type = "line", info = FALSE, cex = 0.8,
-                  main = "Gamma Spectrum")
-    abline(v = c(energy.min, highest_common_energy), lty = 2)
+    ## Plot 1: Spectrum ----
+    ## ---------------------------------------------------------------------- ##
+    if (plot.single)
+      par(mar = c(5, 4, 4, 12) + 0.1)
     
-    mtext("Measured", cex = 0.9, line = 0.3)
+    plot(NA, NA, 
+         ylim = c(0.0001, max(c(spec_bg$counts_norm,
+                               spec_calib$counts_norm,
+                               spec_measured$counts_norm))),
+         xlim = c(0, max(spec_measured$energy)),
+         main = "Gamma Spectrum",
+         xlab = "Energy (keV)",
+         ylab = "Count rate (1/s)",
+         log = "y"
+         )
     
-    # plot reference calibration spectrum
-    plot_Spectrum(data_calib, type = "line", info = FALSE, cex = 0.8,
-                  main = "Gamma Spectrum")
-    abline(v = c(energy.min, highest_common_energy), lty = 2)
+    # add spectra
+    lines(spec_bg, col = "blue", type = "s")
+    lines(spec_calib, col = "red", type = "s")
+    lines(spec_measured, col = "black", type = "s")
+    abline(v = c(energy.min, highest_common_energy), col = "grey", lty = 2)
     
-    mtext("Calibration", cex = 0.9, line = 0.3)
+    # add legend
+    legend(par("usr")[2], par("usr")[4], xpd = NA,
+           bty = "n",
+           legend = c("Measured", "Calibration", "Background", "Energy thresholds"),
+           lty = c(1, 1, 1, 2), lwd = 2,
+           col = c("black", "red", "blue", "grey"))
     
-    # Empirical cumulative distribution
-    plot(ecdf(spec_measured$counts_norm[which.min(abs(spec_measured$energy - energy.min)):
-                                          which.min(abs(spec_measured$energy - highest_common_energy))]),
-         verticals = TRUE, do.points = FALSE,
-         main = "Empirical Cumulative Distribution")
     
-    mtext("Measured", cex = 0.9, line = 0.3)
+    ## Plot 2: continous dose rate
+    ## ---------------------------------------------------------------------- ##
+    if (plot.single)
+      par(mar = c(5, 4, 4, 2) + 0.1)
     
-    plot(ecdf(spec_calib$counts_norm[which.min(abs(spec_calib$energy - energy.min)):
-                                       which.min(abs(spec_calib$energy - highest_common_energy))]), 
-         verticals = TRUE, do.points = FALSE,
-         main = "Empirical Cumulative Distribution")
+    plot(results$energy, 
+         results$doserate, 
+         type = "s", main = "Continous dose rate estimation",
+         xlab = "Lower threshold energy (keV)",
+         ylab = "Dose rate (Gy/ka)",
+         log = "y")
     
-    mtext("Calibration", cex = 0.9, line = 0.3)
     
-    # Linear fit
+    ## Plot 3: Dose rate fit
+    ## ---------------------------------------------------------------------- ##
+    if (plot.single)
+      par(mar = c(5, 4, 4, 8) + 0.1)
+    
     df <- data.frame(x = c(0, results$counts_calib[which.min(abs(results$energy - energy.min))]), 
-                           y = c(0, doseRate_calib[1]))
+                     y = c(0, doseRate_calib[1]))
     
     plot(df, pch = 16, col = "red", 
-         xlim = range(pretty(c(0, results$counts_measured[which.min(abs(results$energy - energy.min))]))),
-         ylim = range(pretty(c(0, doseRate))),
+         xlim = range(pretty(c(0, max(c(results$counts_measured[which.min(abs(results$energy - energy.min))],
+                                        results$counts_calib[which.min(abs(results$energy - energy.min))])) * 1.2))),
+         ylim = range(pretty(c(0, max(c(doseRate, doseRate_calib[1])) * 1.2))),
          ylab = "Fitted dose rate (Gy/ka)",
          xlab = "Count rate (1/s)",
          cex = 1.5,
@@ -186,21 +216,10 @@ calc_DoseRate <- function(data,
     
     mtext(paste("Fitted dose rate:", round(doseRate, 2), "\u00B1", round(doseRate_error, 2), "Gy/ka"), line = 0.3, cex = 0.8)
     
-    legend("left", legend = c("Calibration", "Measured"), pt.cex = 1.5, y.intersp = 0.25, 
+    legend(par("usr")[2], par("usr")[4], xpd = NA,
+           legend = c("Calibration", "Measured"), pt.cex = 1.5,
            pch = c(16, 16), col = c("red", "darkgreen"),  bty = "n")
     
-    # continous dose rate plot
-    plot(results$energy, 
-         results$doserate, 
-         type = "s", main = "Continous dose rate estimation",
-         xlab = "Lower threshold energy (keV)",
-         ylab = "Dose rate (Gy/ka)")
-    
-    arrows(x0 = results$energy[which.min(abs(results$energy - energy.min))],
-           x1 = results$energy[which.min(abs(results$energy - energy.min))],
-          y0 = 0, y1 = doseRate,
-          lty = 1, col = "red", length = 0.15)
-    
-    
   }
+  
 }
