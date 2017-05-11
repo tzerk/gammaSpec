@@ -18,9 +18,10 @@ get_EnergyThreshold <- function() {
 
 ## DOSE RATE CALIBRATION ----
 
-# This is the dose rate of the reference spectrum used for calibration
+# This is the dose rate of the reference spectrum used for calibration (Gy/ka)
+# 2017_04 Weimar bloc 10000s.Spe
 get_SpecDoseRate <- function() {
-  2.208
+  c(1.315, 0.1) #TODO: ASK T. SCHÜLER FOR PRECISE GAMMA DOSE RATE
 }
 
 ## MISCALLENOUS ----
@@ -34,6 +35,7 @@ get_Keywords <- function() {
 
 
 ## BACKGROUND MEASUREMENT ---
+# 2016-11_Labormessung_2_Burg_junior_72h.Spe
 get_SpecBackground <- function() {
   fpath <- system.file("extdata", "background_spectrum.spe", package="gammaSpec")
   read_SPE(fpath)
