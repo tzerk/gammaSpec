@@ -4,22 +4,27 @@
 \alias{calc_DoseRate}
 \title{Calculate the dose rate from a spectrum}
 \usage{
-calc_DoseRate(data, energy.min = get_EnergyThreshold(),
-  background.correction = TRUE, plot = TRUE, ...)
+calc_DoseRate(data, energy.min = get_EnergyThreshold(), energy.max = NULL,
+  background.correction = TRUE, plot = TRUE, plot.single = TRUE, ...)
 }
 \arguments{
 \item{data}{input data}
 
 \item{energy.min}{starting energy in eV}
 
+\item{energy.max}{upper integration limit (not implemented)}
+
 \item{background.correction}{subtract background}
 
 \item{plot}{plot}
 
-\item{...}{currently not used}
+\item{plot.single}{single plots}
+
+\item{...}{Additional arguments: \code{verbose}}
 }
 \value{
-
+Returns terminal output, a plot and a \code{\link{list}} of the following 
+structure:
 }
 \description{
 Calculate the dose rate from a spectrum
@@ -29,4 +34,3 @@ Calculate the dose rate from a spectrum
 # none available yet
 
 }
-

@@ -25,4 +25,3 @@ read_SPE(file, ...)
 # none available yet
 
 }
-

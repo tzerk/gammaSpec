@@ -55,6 +55,9 @@ read_SPE <- function(file, ...) {
   # fill in the counts normalise by the live time
   doc_list$DATA$counts_norm <- doc_list$DATA$counts / doc_list$MEAS_TIM$live
   
+  # add custom class to make use of S3 generics
+  class(doc_list) <- c("SPE", class(doc_list))
+  
   # return the formatted SPE text
   invisible(doc_list)
 }

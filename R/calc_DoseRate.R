@@ -6,9 +6,14 @@
 #' @param background.correction subtract background
 #' @param plot plot
 #' @param plot.single single plots
-#' @param ... currently not used
+#' @param ... Additional arguments: \code{verbose}
 #'
 #' @return
+#' 
+#' Returns terminal output, a plot and a \code{\link{list}} of the following 
+#' structure:
+#' 
+#' 
 #'
 #' @examples
 #' 
@@ -22,6 +27,12 @@ calc_DoseRate <- function(data,
                           plot = TRUE,
                           plot.single = TRUE,
                           ...) {
+  
+  ## SETTINGS ----
+  settings <- list(
+    verbose = TRUE
+  )
+  settings <- modifyList(settings, list(...))
   
   ## FETCH DATA ----
   # reformat the measured data
@@ -119,12 +130,12 @@ calc_DoseRate <- function(data,
   results <- data.frame(energy = spec_measured$energy[energyIndex_min_measured:energyIndex_max_measured],
                         doserate_continous = doseRate_continous$doseRate,
                         doserate_continous_error = doseRate_continous$doseRate_error,
-                        counts_measured = sumCounts_measured_continous,
-                        counts_measured_error = sumCounts_measured_continous_error,
-                        counts_calib = sumCounts_calib_continous,
-                        counts_calib_error = sumCounts_calib_continous_error,
-                        counts_bg = sumCounts_bg_continous,
-                        counts_bg_error = sumCounts_bg_continous_error)
+                        countrate_measured = sumCounts_measured_continous,
+                        countrate_measured_error = sumCounts_measured_continous_error,
+                        countrate_calib = sumCounts_calib_continous,
+                        countrate_calib_error = sumCounts_calib_continous_error,
+                        countrate_bg = sumCounts_bg_continous,
+                        countrate_bg_error = sumCounts_bg_continous_error)
   
   # get the dose rate derived from the desired energy threshold
   doseRate <- results$doserate_continous[which.min(abs(results$energy - energy.min))]
@@ -187,12 +198,12 @@ calc_DoseRate <- function(data,
     if (plot.single)
       par(mar = c(5, 4, 4, 8) + 0.1)
     
-    df <- data.frame(x = c(0, results$counts_calib[which.min(abs(results$energy - energy.min))]), 
+    df <- data.frame(x = c(0, results$countrate_calib[which.min(abs(results$energy - energy.min))]), 
                      y = c(0, doseRate_calib[1]))
     
     plot(df, pch = 16, col = "red", 
-         xlim = range(pretty(c(0, max(c(results$counts_measured[which.min(abs(results$energy - energy.min))],
-                                        results$counts_calib[which.min(abs(results$energy - energy.min))])) * 1.2))),
+         xlim = range(pretty(c(0, max(c(results$countrate_measured[which.min(abs(results$energy - energy.min))],
+                                        results$countrate_calib[which.min(abs(results$energy - energy.min))])) * 1.2))),
          ylim = range(pretty(c(0, max(c(doseRate, doseRate_calib[1])) * 1.2))),
          ylab = "Fitted dose rate (Gy/ka)",
          xlab = "Count rate (1/s)",
@@ -201,16 +212,16 @@ calc_DoseRate <- function(data,
     
     abline(lm(y ~ x, df), lty = 1)
     
-    points(results$counts_measured[which.min(abs(results$energy - energy.min))],
+    points(results$countrate_measured[which.min(abs(results$energy - energy.min))],
            doseRate, 
            pch = 16, col = "darkgreen", cex = 1.5)
     
-    lines(c(results$counts_measured[which.min(abs(results$energy - energy.min))], 0),
+    lines(c(results$countrate_measured[which.min(abs(results$energy - energy.min))], 0),
            c(doseRate, doseRate), 
           lty = 2)
     
-    lines(c(results$counts_measured[which.min(abs(results$energy - energy.min))],
-            results$counts_measured[which.min(abs(results$energy - energy.min))]),
+    lines(c(results$countrate_measured[which.min(abs(results$energy - energy.min))],
+            results$countrate_measured[which.min(abs(results$energy - energy.min))]),
           c(0, doseRate),
           lty = 2)
     
@@ -222,4 +233,28 @@ calc_DoseRate <- function(data,
     
   }
   
+  ## TERMINAL OUTPUT ----
+  if (settings$verbose) {
+    
+  }
+  
+  ## RETURN VALUE ----
+  out <- list(
+    summary = data.frame(
+      doserate = doseRate,
+      doseRate_error
+    ),
+    data = list(measured = data,
+                calibration = get_SpecCalib(),
+                background = get_SpecBackground()),
+    table = results,
+    call = sys.call(0),
+    args = as.list(sys.call(0))[-1]
+  )
+  
+  return(out)
+  
+  ##TODO:
+  # Add terminal output
+  # Add return value
 }

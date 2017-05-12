@@ -22,4 +22,3 @@ data(MassAttenuationCoefficients, envir = environment())
 
 }
 \keyword{datasets}
-

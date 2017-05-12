@@ -8,8 +8,8 @@
 #' @author Christoph Burow (University of Cologne, Germany)
 #' @keywords package
 #' 
-#' @importFrom graphics abline arrows lines mtext par legend plot points polygon text
-#' @importFrom stats ecdf lm predict setNames
+#' @importFrom graphics abline arrows lines mtext par legend plot points polygon text grconvertX grconvertY
+#' @importFrom stats ecdf lm predict setNames coef
 #' @importFrom utils modifyList
 NULL
 
@@ -35,5 +35,6 @@ NULL
 #' 
 #' @examples 
 #' data(MassAttenuationCoefficients, envir = environment())
+#' plot(MassAttenuationCoefficients)
 #' 
 NULL

@@ -1,8 +1,8 @@
 Package: gammaSpec
 Type: Package
 Title: A Collection of Functions to Analyse Gamma Spectrums
-Version: 0.1.0.9000
-Date: 2016-06-16
+Version: 0.1.0.9100
+Date: 2017-05-12
 Authors@R: c(
     person("Christoph", "Burow", role = c("aut", "cre"), email = "christoph.burow@uni-koeln.de")
     )
@@ -12,4 +12,4 @@ License: GPL-3
 URL: https://github.com/tzerk/gammaSpec
 BugReports: https://github.com/tzerk/gammaSpec/issues
 LazyData: TRUE
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
