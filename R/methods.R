@@ -1,6 +1,16 @@
 ####################################################################################################
 # methods for generic: plot()
 # ##################################################################################################
+#' methods
+#' 
+#' Methods for S3-generics implemented for the package 'gammaSpec'.
+#' This document summarises all implemented S3-generics.
+#' @param x object
+#' @param y currently not used
+#' @param ... Arguments to be passed to \code{\link{plot}}.
+#' @name methods
+NULL
+
 #' @rdname methods
 #' @method plot SPE
 #' @param type \code{\link{character}} (default: \code{"bar"}): 

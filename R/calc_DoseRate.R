@@ -1,12 +1,30 @@
-#' Calculate the dose rate from a spectrum
-#'
-#' @param data input data
-#' @param energy.min starting energy in eV
-#' @param energy.max upper integration limit (not implemented)
-#' @param background.correction subtract background
-#' @param plot plot
-#' @param plot.combine single plots
-#' @param ... Additional arguments: \code{verbose}
+#' Estimate the in-situ wet gamma dose rate
+#' 
+#' This function estimates the in-situ gamma dose rate of the provided gamma spectrum
+#' based on the recorded countrate and comparing the integrated sum to that
+#' of an internal calibration spectrum.
+#' 
+#' @param data \bold{required}: 
+#' An SPE file imported with \code{\link[gammaSpec]{read_SPE}}
+#' 
+#' @param energy.min \code{\link{numeric}} (default: \code{500}):
+#' Lower integration limit of the photon energy (keV).
+#' 
+#' @param energy.max \code{\link{numeric}} (optional):
+#' upper integration limit of the photon energy (keV).
+#' 
+#' @param background.correction \code{\link{logical}} (default: \code{TRUE}):
+#' If \code{TRUE} a background signal (included in this package) is subtracted
+#' from both the measured and the calibration spectrum.
+#' 
+#' @param plot \code{\link{logical}} (default: \code{TRUE}):
+#' Show or hide the plot(s).
+#' 
+#' @param plot.combine \code{\link{logical}} (default: \code{TRUE}):
+#' Combine all plots in a single plot device.
+#' 
+#' @param ... Additional arguments: \code{verbose}. Furhter arguments to be
+#' passed to \code{\link{plot}} and related functions.
 #'
 #' @return
 #' 
@@ -15,7 +33,22 @@
 #'
 #' @examples
 #' 
-#' # none available yet
+#' ## Load Example Data
+#' file <- system.file("extdata", "Nievenheim_DORNIE_1.spe", package = "gammaSpec")
+#' 
+#' ## Import SPE files
+#' spec <- read_SPE(file)
+#' 
+#' ## Estimate the in-situ gamma dose rate
+#' res <- calc_DoseRate(data = spec,
+#'                      energy.min = 1000,
+#'                      energy.max = 2000,
+#'                      background.correction = TRUE,
+#'                      plot = TRUE,
+#'                      plot.combine = TRUE,
+#'                      verbose = TRUE)
+#'                      
+#' print(res$summary)
 #' 
 #' @export
 calc_DoseRate <- function(data, 
@@ -26,9 +59,22 @@ calc_DoseRate <- function(data,
                           plot.combine = TRUE,
                           ...) {
   
+  ## INPUT VERICIFATION ----
+  if (!inherits(data, "SPE"))
+    stop("Invalid input data. Please provide an object returned by 'gammaSpec::read_SPE()'.", 
+         call. = FALSE)
+  if (!is.null(energy.max) &&  energy.min >= energy.max)
+    stop("'energy.min' must be lower than 'energy.max'.", call. = FALSE)
+  if (energy.min < 0)
+    stop("'energy.min' must not be negative.", call. = FALSE)
+  if (!is.null(energy.max) && energy.max < 0)
+    stop("'energy.max' must not be negative.", call. = FALSE)
+  
+  
   ## SETTINGS ----
   settings <- list(
-    verbose = TRUE
+    verbose = TRUE,
+    cex = 1.0
   )
   settings <- modifyList(settings, list(...))
   
@@ -150,7 +196,8 @@ calc_DoseRate <- function(data,
     if (plot.combine) {
       par(mar = c(5, 14, 4, 14) + 0.1)
       par(mfrow = c(3, 1))
-    } 
+    }
+    par(cex = settings$cex)
     
     ## Plot 1: Spectrum ----
     ## ---------------------------------------------------------------------- ##
@@ -219,7 +266,7 @@ calc_DoseRate <- function(data,
            pch = 16, col = "darkgreen", cex = 1.5)
     
     lines(c(results$countrate_measured[which.min(abs(results$energy - energy.min))], 0),
-          c(doseRate, doseRate), 
+          c(doseRate, doseRate),
           lty = 2)
     
     lines(c(results$countrate_measured[which.min(abs(results$energy - energy.min))],

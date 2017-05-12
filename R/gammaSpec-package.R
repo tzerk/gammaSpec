@@ -1,6 +1,9 @@
-#' A Collection of Functions to Analyse Gamma Spectrums
+#' Analyse Gamma Spectra of NaI(Tl) Scintillation Radiation Detectors
 #'
-#' <placeholder>
+#' A minimal package to import and plot SPE files recorded by
+#' ORTEC NaI(Tl) Scintillation Radiation Detectors with a digiBASE 
+#' Digital Multichannel Analyser as well as to derive the external wet 
+#' gamma dose rate.
 #' 
 #' @name gammaSpec-package
 #' @aliases gammaSpec-package

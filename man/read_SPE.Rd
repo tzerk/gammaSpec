@@ -7,21 +7,31 @@
 read_SPE(file, ...)
 }
 \arguments{
-\item{file}{\code{\link{character}} \bold{required}: file path}
+\item{file}{\code{\link{character}} \bold{required}:
+File path}
 
 \item{...}{currently not used.}
 }
 \value{
-
+A \code{\link{list}} of the tokenized SPE file.
 }
 \description{
-<placeholder>
-}
-\details{
-<placeholder>
+Import SPE files produced by the ORTEC application software
+MAESTRO Mulichannel Analyzer Emulation and
+GammaVision Gamma Spectroscopy
 }
 \examples{
 
-# none available yet
+## Load Example Data
+file_1 <- system.file("extdata", "Nievenheim_DORNIE_1.spe", package = "gammaSpec")
+file_2 <- system.file("extdata", "Nievenheim_DORNIE_2.spe", package = "gammaSpec")
+file_3 <- system.file("extdata", "Nievenheim_DORNIE_3.spe", package = "gammaSpec")
+file_4 <- system.file("extdata", "Nievenheim_DORNIE_4.spe", package = "gammaSpec")
+
+## Import SPE files
+spec_1 <- read_SPE(file_1)
+spec_2 <- read_SPE(file_2)
+spec_3 <- read_SPE(file_3)
+spec_4 <- read_SPE(file_4)
 
 }

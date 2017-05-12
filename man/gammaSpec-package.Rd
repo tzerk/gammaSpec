@@ -3,9 +3,12 @@
 \docType{package}
 \name{gammaSpec-package}
 \alias{gammaSpec-package}
-\title{A Collection of Functions to Analyse Gamma Spectrums}
+\title{Analyse Gamma Spectra of NaI(Tl) Scintillation Radiation Detectors}
 \description{
-<placeholder>
+A minimal package to import and plot SPE files recorded by
+ORTEC NaI(Tl) Scintillation Radiation Detectors with a digiBASE 
+Digital Multichannel Analyser as well as to derive the external wet 
+gamma dose rate.
 }
 \author{
 Christoph Burow (University of Cologne, Germany)

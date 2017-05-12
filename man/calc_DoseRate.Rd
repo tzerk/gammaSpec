@@ -2,35 +2,58 @@
 % Please edit documentation in R/calc_DoseRate.R
 \name{calc_DoseRate}
 \alias{calc_DoseRate}
-\title{Calculate the dose rate from a spectrum}
+\title{Estimate the in-situ wet gamma dose rate}
 \usage{
 calc_DoseRate(data, energy.min = get_EnergyThreshold(), energy.max = NULL,
-  background.correction = TRUE, plot = TRUE, plot.single = TRUE, ...)
+  background.correction = TRUE, plot = TRUE, plot.combine = TRUE, ...)
 }
 \arguments{
-\item{data}{input data}
+\item{data}{\bold{required}: 
+An SPE file imported with \code{\link[gammaSpec]{read_SPE}}}
 
-\item{energy.min}{starting energy in eV}
+\item{energy.min}{\code{\link{numeric}} (default: \code{500}):
+Lower integration limit of the photon energy (keV).}
 
-\item{energy.max}{upper integration limit (not implemented)}
+\item{energy.max}{\code{\link{numeric}} (optional):
+upper integration limit of the photon energy (keV).}
 
-\item{background.correction}{subtract background}
+\item{background.correction}{\code{\link{logical}} (default: \code{TRUE}):
+If \code{TRUE} a background signal (included in this package) is subtracted
+from both the measured and the calibration spectrum.}
 
-\item{plot}{plot}
+\item{plot}{\code{\link{logical}} (default: \code{TRUE}):
+Show or hide the plot(s).}
 
-\item{plot.single}{single plots}
+\item{plot.combine}{\code{\link{logical}} (default: \code{TRUE}):
+Combine all plots in a single plot device.}
 
 \item{...}{Additional arguments: \code{verbose}}
 }
 \value{
-Returns terminal output, a plot and a \code{\link{list}} of the following 
-structure:
+Returns terminal output, a plot and a \code{\link{list}}.
 }
 \description{
-Calculate the dose rate from a spectrum
+This function estimates the in-situ gamma dose rate of the provided gamma spectrum
+based on the recorded countrate and comparing the integrated sum to that
+of an internal calibration spectrum.
 }
 \examples{
 
-# none available yet
+## Load Example Data
+file <- system.file("extdata", "Nievenheim_DORNIE_1.spe", package = "gammaSpec")
+
+## Import SPE files
+spec <- read_SPE(file)
+
+## Estimate the in-situ gamma dose rate
+res <- calc_DoseRate(data = spec,
+                     energy.min = 1000,
+                     energy.max = 2000,
+                     background.correction = TRUE,
+                     plot = TRUE,
+                     plot.combine = TRUE,
+                     verbose = TRUE)
+                     
+print(res$summary)
 
 }

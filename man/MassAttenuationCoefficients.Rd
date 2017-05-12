@@ -19,6 +19,7 @@ in cm^2/g. Data taken from the NIST XCOM Photon Cross Section Database.
 }
 \examples{
 data(MassAttenuationCoefficients, envir = environment())
+plot(MassAttenuationCoefficients)
 
 }
 \keyword{datasets}
