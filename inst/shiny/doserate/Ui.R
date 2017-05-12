@@ -43,7 +43,7 @@ fluidPage(
                         tags$a(href = "https://github.com/tzerk/gammaSpec", 
                                "Package source code on GitHub", target = "_blank"),
                         tags$br(),
-                        tags$a(href = "https://github.com/tzerk/gammaSpec/inst/shiny/doserate", 
+                        tags$a(href = "https://github.com/tzerk/gammaSpec/tree/master/inst/shiny/doserate", 
                                "Shiny app source code on GitHub", target = "_blank"),
                         tags$hr(),
                         tags$p(tags$b("Author:"), "Christoph Burow")
