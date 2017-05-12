@@ -12,7 +12,8 @@ function(input, output, session) {
     if(is.null(inFile)) 
       return(NULL) # if no file was uploaded return NULL
     
-    values$file <- read_SPE(file = inFile$datapath, data.table = FALSE) # inFile[1] contains filepath 
+    values$file <- tryCatch({read_SPE(file = inFile$datapath, data.table = FALSE)},
+                            error = function(e) { NULL } ) 
   })
   
   # Fill in the spot we created for a plot
