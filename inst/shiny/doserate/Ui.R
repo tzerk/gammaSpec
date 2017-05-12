@@ -19,12 +19,17 @@ fluidPage(
                        multiple = FALSE, 
                        label = "Upload SPE file", 
                        placeholder = "Upload a file..."),
+      tags$p(HTML("<span style='color:grey;'>Please upload SPE files exported from the ORTEC applications
+             'MAESTRO Mulichannel Analyzer Emulation' or 'GammaVision Gamma Spectroscopy'</span>")),
       hr(),
       sliderInput(inputId = "energy", label = "Integrated energy range (keV)", 
                   min = 0, max = 5000, value = c(500, 2000), step = 10),
+      tags$p(HTML("<span style='color:grey;'>Set the lower and upper integration limits of the photon energy (keV).</span>")),
       checkboxInput(inputId = "bg", label = "Background correction", value = TRUE),
+      tags$p(HTML("<span style='color:grey;'>Check if a background signal (included in the package) should be subtracted
+             from both the measured and the calibration spectrum.</span>")),
       hr(),
-      actionButton(inputId = "btn", label = "Calculate", icon = icon("rocket")),
+      actionButton(inputId = "btn", label = "Calculate", icon = icon("rocket"), class = "btn btn-primary"),
       br(),
       br(),
       htmlOutput("console")
