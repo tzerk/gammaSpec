@@ -5,14 +5,12 @@
 #' @param energy.max upper integration limit (not implemented)
 #' @param background.correction subtract background
 #' @param plot plot
-#' @param plot.single single plots
+#' @param plot.combine single plots
 #' @param ... Additional arguments: \code{verbose}
 #'
 #' @return
 #' 
-#' Returns terminal output, a plot and a \code{\link{list}} of the following 
-#' structure:
-#' 
+#' Returns terminal output, a plot and a \code{\link{list}}. 
 #' 
 #'
 #' @examples
@@ -25,7 +23,7 @@ calc_DoseRate <- function(data,
                           energy.max = NULL,
                           background.correction = TRUE, 
                           plot = TRUE,
-                          plot.single = TRUE,
+                          plot.combine = TRUE,
                           ...) {
   
   ## SETTINGS ----
@@ -50,7 +48,7 @@ calc_DoseRate <- function(data,
   spec_bg <- data.frame(energy = data_bg$DATA$energy,
                         counts_norm = data_bg$DATA$counts_norm)
   
- 
+  
   # determine the highest common energy to cut of the data
   highest_common_energy <- min(c(spec_measured$energy[length(spec_measured$energy)], 
                                  spec_calib$energy[length(spec_calib$energy)],
@@ -144,32 +142,36 @@ calc_DoseRate <- function(data,
   ## PLOTTING ----
   if (plot) {
     
+    # save and restore plot parameters
+    par.old <- par(no.readonly = TRUE)
+    on.exit(par(par.old))
+    
     # set graphical parameters (3x1 plot area)
-    if (!plot.single) {
+    if (plot.combine) {
       par(mar = c(5, 14, 4, 14) + 0.1)
       par(mfrow = c(3, 1))
     } 
     
     ## Plot 1: Spectrum ----
     ## ---------------------------------------------------------------------- ##
-    if (plot.single)
+    if (!plot.combine)
       par(mar = c(5, 4, 4, 12) + 0.1)
     
     plot(NA, NA, 
          ylim = c(0.0001, max(c(spec_bg$counts_norm,
-                               spec_calib$counts_norm,
-                               spec_measured$counts_norm))),
+                                spec_calib$counts_norm,
+                                spec_measured$counts_norm))),
          xlim = c(0, max(spec_measured$energy)),
          main = "Gamma Spectrum",
          xlab = "Energy (keV)",
          ylab = "Count rate (1/s)",
          log = "y"
-         )
+    )
     
     # add spectra
-    lines(spec_bg, col = "blue", type = "s")
-    lines(spec_calib, col = "red", type = "s")
-    lines(spec_measured, col = "black", type = "s")
+    lines(spec_bg[which(spec_bg$counts_norm > 0), ], col = "blue", type = "s")
+    lines(spec_calib[which(spec_calib$counts_norm > 0), ], col = "red", type = "s")
+    lines(spec_measured[which(spec_measured$counts_norm > 0), ], col = "black", type = "s")
     abline(v = c(energy.min, highest_common_energy), col = "grey", lty = 2)
     
     # add legend
@@ -182,20 +184,20 @@ calc_DoseRate <- function(data,
     
     ## Plot 2: continous dose rate
     ## ---------------------------------------------------------------------- ##
-    if (plot.single)
+    if (!plot.combine)
       par(mar = c(5, 4, 4, 2) + 0.1)
     
     plot(results$energy, 
-         results$doserate, 
+         results$doserate_continous, 
          type = "s", main = "Continous dose rate estimation",
          xlab = "Lower threshold energy (keV)",
          ylab = "Dose rate (Gy/ka)",
-         log = "y")
+         log = "")
     
     
     ## Plot 3: Dose rate fit
     ## ---------------------------------------------------------------------- ##
-    if (plot.single)
+    if (!plot.combine)
       par(mar = c(5, 4, 4, 8) + 0.1)
     
     df <- data.frame(x = c(0, results$countrate_calib[which.min(abs(results$energy - energy.min))]), 
@@ -217,7 +219,7 @@ calc_DoseRate <- function(data,
            pch = 16, col = "darkgreen", cex = 1.5)
     
     lines(c(results$countrate_measured[which.min(abs(results$energy - energy.min))], 0),
-           c(doseRate, doseRate), 
+          c(doseRate, doseRate), 
           lty = 2)
     
     lines(c(results$countrate_measured[which.min(abs(results$energy - energy.min))],
@@ -235,7 +237,9 @@ calc_DoseRate <- function(data,
   
   ## TERMINAL OUTPUT ----
   if (settings$verbose) {
-    
+    message("\n [calc_DoseRate()]\n\n",
+            " Estimated external wet gamma dose rate (including cosmic dose rate):\n\n",
+            " ", round(doseRate, 3), " \u00B1 ", round(doseRate_error, 3), "\n")
   }
   
   ## RETURN VALUE ----
@@ -253,8 +257,4 @@ calc_DoseRate <- function(data,
   )
   
   return(out)
-  
-  ##TODO:
-  # Add terminal output
-  # Add return value
 }
