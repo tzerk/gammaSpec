@@ -5,7 +5,8 @@
 \title{Estimate the in-situ wet gamma dose rate}
 \usage{
 calc_DoseRate(data, energy.min = get_EnergyThreshold(), energy.max = NULL,
-  background.correction = TRUE, plot = TRUE, plot.combine = TRUE, ...)
+  background.correction = TRUE, plot = TRUE, plot.combine = TRUE,
+  app = FALSE, ...)
 }
 \arguments{
 \item{data}{\bold{required}: 
@@ -27,8 +28,12 @@ Show or hide the plot(s).}
 \item{plot.combine}{\code{\link{logical}} (default: \code{TRUE}):
 Combine all plots in a single plot device.}
 
+\item{app}{\code{\link{logical}} (default: \code{FALSE}):
+Start the shiny application (requires the the \code{shiny} package). If \code{TRUE}
+all other arguments are ignored.}
+
 \item{...}{Additional arguments: \code{verbose}. Further arguments to be
-passed to \code{\link{plot}} and related functions.}
+passed to \code{\link{plot}} or, if \code{app = TRUE}, to \code{\link[shiny]{runApp}}.}
 }
 \value{
 Returns terminal output, a plot and a \code{\link{list}}.

@@ -23,8 +23,12 @@
 #' @param plot.combine \code{\link{logical}} (default: \code{TRUE}):
 #' Combine all plots in a single plot device.
 #' 
+#' @param app \code{\link{logical}} (default: \code{FALSE}):
+#' Start the shiny application (requires the the \code{shiny} package). If \code{TRUE}
+#' all other arguments are ignored.
+#' 
 #' @param ... Additional arguments: \code{verbose}. Further arguments to be
-#' passed to \code{\link{plot}} and related functions.
+#' passed to \code{\link{plot}} or, if \code{app = TRUE}, to \code{\link[shiny]{runApp}}.
 #'
 #' @return
 #' 
@@ -57,7 +61,19 @@ calc_DoseRate <- function(data,
                           background.correction = TRUE, 
                           plot = TRUE,
                           plot.combine = TRUE,
+                          app = FALSE,
                           ...) {
+  
+  ## SHINY APPLICATION ----
+  if (app) {
+    # Stop if 'shiny' is not installed (only in SUGGESTS)
+    if (!requireNamespace("shiny", quietly = TRUE))
+      stop("Shiny applications require the 'shiny' package. To install",
+           " this package run 'install.packages('shiny')' in your R console.", 
+           call. = FALSE)
+    
+    app <- shiny::runApp(system.file("shiny/doserate", package = "gammaSpec"), launch.browser = TRUE,  ...)
+  }
   
   ## INPUT VERICIFATION ----
   if (!inherits(data, "SPE"))
