@@ -27,7 +27,8 @@ Show or hide the plot(s).}
 \item{plot.combine}{\code{\link{logical}} (default: \code{TRUE}):
 Combine all plots in a single plot device.}
 
-\item{...}{Additional arguments: \code{verbose}}
+\item{...}{Additional arguments: \code{verbose}. Further arguments to be
+passed to \code{\link{plot}} and related functions.}
 }
 \value{
 Returns terminal output, a plot and a \code{\link{list}}.

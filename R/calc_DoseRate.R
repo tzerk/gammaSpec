@@ -23,7 +23,7 @@
 #' @param plot.combine \code{\link{logical}} (default: \code{TRUE}):
 #' Combine all plots in a single plot device.
 #' 
-#' @param ... Additional arguments: \code{verbose}. Furhter arguments to be
+#' @param ... Additional arguments: \code{verbose}. Further arguments to be
 #' passed to \code{\link{plot}} and related functions.
 #'
 #' @return
