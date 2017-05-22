@@ -43,7 +43,8 @@ fluidPage(
                  ),
         tabPanel("Info",
                  tags$br(),
-                 tags$p(HTML("Please see the Vignettes of the <b>R</b> package <code>gammaSpec</code>"),
+                 tags$p(HTML("Please see the Vignettes of the <b>R</b> package <code>gammaSpec</code>
+                             (see <code>vignette(topic = 'theory', package = 'gammaSpec')</code>)"),
                         tags$br(), tags$br(),
                         tags$a(href = "https://github.com/tzerk/gammaSpec", 
                                "Package source code on GitHub", target = "_blank"),
