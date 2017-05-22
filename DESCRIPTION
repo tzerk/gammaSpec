@@ -1,10 +1,7 @@
 Package: gammaSpec
 Type: Package
 Title: Analyse Gamma Spectra of NaI(Tl) Scintillation Radiation Detectors
-Description: A minimal package to import and plot SPE files recorded by
-    ORTEC NaI(Tl) Scintillation Radiation Detectors with a digiBASE 
-    Digital Multichannel Analyser as well as to derive the external wet 
-    gamma dose rate.
+Description: Description: A Collection of Functions to Analyse Gamma Spectrums.
 Version: 0.1.0.9100
 Date: 2017-05-12
 Authors@R: c(
@@ -12,7 +9,6 @@ Authors@R: c(
     person("Franz", "Hartung", role = "ctb", comment = "Physics consulting")
     )
 Maintainer: Christoph Burow <christoph.burow@uni-koeln.de>
-Description: A Collection of Functions to Analyse Gamma Spectrums.
 License: GPL-3
 URL: https://github.com/tzerk/gammaSpec
 BugReports: https://github.com/tzerk/gammaSpec/issues
@@ -21,5 +17,8 @@ Depends:
     R (>= 3.3.2)
 Suggests:
     shiny (>= 1.03),
-    testthat (>= 1.02)
+    testthat (>= 1.02),
+    knitr,
+    rmarkdown
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr

@@ -1,0 +1,130 @@
+---
+title: "Theoretical considerations on the dose rate calibration of NaI:Tl detectors"
+author: "Christoph Burow, Franz Hartung"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    number_sections: yes
+    toc: no
+    toc_depth: 6
+vignette: >
+  %\VignetteIndexEntry{Theoretical considerations on the dose rate calibration of NAI:Tl detectors}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Dose rate estimation
+
+For a NaI:Tl detector the dose rate $\dot{D}_M$ from count rate $\dot{N'}_M$ can
+be estimated using the following linear relationship
+
+\begin{equation}
+  \dot{D}_M = m * \dot{N'}_M + \dot{D}_0
+\end{equation}
+
+with $m$ being the slope and $\dot{D}_0$ the intercept. Both these parameters must
+be estimated by calibration measurements, which must be representative for
+the designated use case (e.g. in terms of geometry, material and source spectrum). 
+The count rate $\dot{N'}_M$ is calculated from
+
+\begin{equation}
+  \dot{N'}_M = \dot{N}_M - \dot{N}_B
+\end{equation}
+
+where the measured count rate $\dot{N'}_M$ is subtracted a measured background
+count rate $\dot{N'}_B$
+
+Both count rates are calculated with
+
+\begin{equation}
+  \dot{N} = \frac{N}{T} \\ = \frac{1}{T} * \displaystyle\sum_{i=k}^{k'}N_i
+\end{equation}
+
+where $T$ is the measurement time and $N_i$ are the measured counts in the
+$i$th channel. The lowest summation index $k$ is set to a channel closest to 
+to a corresponding energy $E$ = 500 keV, while index $k'$ is set to the channel closest to 
+$E$ = 4 MeV. These default values were chosen as the differences in photon 
+interaction cross sections in quartz and NaI:Tl are smallest in this energy range and thus a 
+similar deposition of dose can be expected.
+
+# Calibration
+
+Parameters $m$ and $\dot{D}_0$ of (1) are estimated by separate calibration 
+measurements, where the count rates $\dot{N'}_{C1}$ and $\dot{N'}_{C2}$ of 
+two known dose rates $\dot{D}_{C1}$ and $\dot{D}_{C2}$ must be determined using
+(2) and (3). With these results the coefficients $m$ and $\dot{D}_0$ can be 
+calculated with
+
+\begin{equation}
+  m = \frac{\dot{D}_{C1} - \dot{D}_{C2}}{\dot{N'}_{C1} - \dot{N'}_{C2}}
+\end{equation}
+
+and
+
+\begin{equation}
+  \dot{D}_0 = \dot{D}_{C1} - m * \dot{N'}_{C1}
+\end{equation}
+
+As both count rates are background corrected the calibration curve can be
+expected to include the pair of values $\dot{D} = 0$ and $\dot{N'} = 0$. If only
+one calibration spectrum (i.e., $\dot{D}_{C1}$ and $\dot{N'}_{C1}$) is available 
+one could simplify (1) by assuming intercept $\dot{D}_0 = 0$.
+
+# Estimating the uncertainty
+
+## Count rate
+
+The uncertainty $\Delta\dot{N}$ on the count rates are assumed to follow 
+Poisson statistics:
+
+\begin{equation}
+  \Delta\dot{N} = \frac{1}{T} * \sqrt{N} \\
+                  = \frac{1}{T} * \sqrt{\dot{N} * T} \\
+                  = \frac{\sqrt{\dot{N}} * \sqrt{T}}{\sqrt{T} * \sqrt{T}} \\
+                  = \sqrt{\frac{\dot{N}}{T}}
+\end{equation}
+
+For the uncertainty on (2) it follows
+
+\begin{equation}
+  \Delta\dot{N'}_M = \sqrt{(\Delta\dot{N}_M)^2 + (\Delta\dot{N}_B)^2}
+\end{equation}
+
+which can also analogously be applied to all other count rates.
+
+## Calibration
+
+Deduced from (7) and known $\dot{D}_{C1}$ and $\dot{D}_{C2}$ 
+the uncertainty on (4) is estimated by 
+
+\begin{equation}
+  \Delta{m} = m * \sqrt{
+    (\frac{\Delta\dot{D}_{C1}}{\dot{D}_{C1} - \dot{D}_{C2}})^2 +
+    (\frac{\Delta\dot{D}_{C2}}{\dot{D}_{C1} - \dot{D}_{C2}})^2 +
+    (\frac{\Delta\dot{N}_{C1}}{\dot{N}_{C1} - \dot{N}_{C2}})^2 +
+    (\frac{\Delta\dot{N}_{C2}}{\dot{N}_{C1} - \dot{N}_{C2}})^2
+  }
+\end{equation}
+
+In consideration of (8) the uncertainty on (5) is estimated by
+
+\begin{equation}
+  \Delta\dot{D}_0 = \sqrt{
+    (\Delta\dot{D}_{C1})^2 +
+    (\dot{N'}_{C1} * \Delta{m})^2 +
+    (m * \Delta\dot{N'}_{C1})^2
+  }
+\end{equation}
+
+## Measured dose rate
+
+Finally, with (8) and (9) the uncertainty on the measured dose rate $\dot{D}_M$,
+estimated in (1), is calculated with
+
+\begin{equation}
+  \Delta\dot{D}_M = \sqrt{
+    (\dot{N'}_M * \Delta{m})^2 +
+    (m * \Delta{\dot{N'}_M})^2 +
+    (\Delta\dot{D}_0)^2
+  }
+\end{equation}
