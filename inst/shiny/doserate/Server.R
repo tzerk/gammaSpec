@@ -24,12 +24,17 @@ function(input, output, session) {
     
     output$plot <- renderPlot({
       
-      values$result <- calc_DoseRate(isolate(values$file),
-                           energy.min = isolate(input$energy[1]),
-                           energy.max = isolate(input$energy[2]),
-                           background.correction = isolate(input$bg),
-                           cex = 1.05, 
-                           verbose = FALSE)
+      withProgress(message = "Calculation in Progress", detail = "This may take a while...",
+                   value = 1, {
+                     
+                     values$result <- calc_DoseRate(isolate(values$file),
+                                                    energy.min = isolate(input$energy[1]),
+                                                    energy.max = isolate(input$energy[2]),
+                                                    background.correction = isolate(input$bg),
+                                                    cex = 1.05, 
+                                                    verbose = FALSE)
+                     
+                   })
       
     })
     
