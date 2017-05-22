@@ -13,12 +13,14 @@ fluidPage(
     sidebarPanel(
       tags$div(align = "center",
                tags$p(tags$b("Estimate the in-situ gamma dose rate"))
-               ),
+      ),
       hr(),
       fileInput(inputId = "file",
-                       multiple = FALSE, 
-                       label = "Upload SPE file", 
-                       placeholder = "Upload a file..."),
+                multiple = FALSE, 
+                label = "Upload SPE file", 
+                placeholder = "Upload a file...",
+                accept=".spe, text/spe"
+      ),
       tags$p(HTML("<span style='color:grey;'>Please upload SPE files exported from the ORTEC applications
              'MAESTRO Mulichannel Analyzer Emulation' or 'GammaVision Gamma Spectroscopy'</span>")),
       hr(),
@@ -40,7 +42,7 @@ fluidPage(
       tabsetPanel(
         tabPanel("Plot",
                  plotOutput("plot", height = "1000px")
-                 ),
+        ),
         tabPanel("Info",
                  tags$br(),
                  tags$p(HTML("Please see the Vignettes of the <b>R</b> package <code>gammaSpec</code>
@@ -53,8 +55,8 @@ fluidPage(
                                "Shiny app source code on GitHub", target = "_blank"),
                         tags$hr(),
                         tags$p(tags$b("Author:"), "Christoph Burow")
-                        )
                  )
+        )
       )
     )
     
