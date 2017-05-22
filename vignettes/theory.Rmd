@@ -19,7 +19,7 @@ For a NaI:Tl detector the dose rate $\dot{D}_M$ from count rate $\dot{N'}_M$ can
 be estimated using the following linear relationship
 
 \begin{equation}
-  \dot{D}_M = m * \dot{N'}_M + \dot{D}_0
+  \dot{D}_M = m \cdot \dot{N'}_M + \dot{D}_0
 \end{equation}
 
 with $m$ being the slope and $\dot{D}_0$ the intercept. Both these parameters must
@@ -31,17 +31,17 @@ The count rate $\dot{N'}_M$ is calculated from
   \dot{N'}_M = \dot{N}_M - \dot{N}_B
 \end{equation}
 
-where the measured count rate $\dot{N'}_M$ is subtracted a measured background
-count rate $\dot{N'}_B$
+where the measured count rate $\dot{N}_M$ is subtracted a measured background
+count rate $\dot{N}_B$
 
 Both count rates are calculated with
 
 \begin{equation}
-  \dot{N} = \frac{N}{T} \\ = \frac{1}{T} * \displaystyle\sum_{i=k}^{k'}N_i
+  \dot{N} = \frac{N}{T} \\ = \frac{1}{T} \cdot \displaystyle\sum_{i=k}^{k'}N_i
 \end{equation}
 
-where $T$ is the measurement time and $N_i$ are the measured counts in the
-$i$th channel. The lowest summation index $k$ is set to a channel closest to 
+where $T$ is the measurement time and $N_i$ is the number of measured counts in the
+$i$th channel. The lowest summation index $k$ is set to a channel closest  
 to a corresponding energy $E$ = 500 keV, while index $k'$ is set to the channel closest to 
 $E$ = 4 MeV. These default values were chosen as the differences in photon 
 interaction cross sections in quartz and NaI:Tl are smallest in this energy range and thus a 
@@ -62,7 +62,7 @@ calculated with
 and
 
 \begin{equation}
-  \dot{D}_0 = \dot{D}_{C1} - m * \dot{N'}_{C1}
+  \dot{D}_0 = \dot{D}_{C1} - m \cdot \dot{N'}_{C1}
 \end{equation}
 
 As both count rates are background corrected the calibration curve can be
@@ -74,13 +74,13 @@ one could simplify (1) by assuming intercept $\dot{D}_0 = 0$.
 
 ## Count rate
 
-The uncertainty $\Delta\dot{N}$ on the count rates are assumed to follow 
+The uncertainty on the count rates $\Delta\dot{N}$ is assumed to follow 
 Poisson statistics:
 
 \begin{equation}
-  \Delta\dot{N} = \frac{1}{T} * \sqrt{N} \\
-                  = \frac{1}{T} * \sqrt{\dot{N} * T} \\
-                  = \frac{\sqrt{\dot{N}} * \sqrt{T}}{\sqrt{T} * \sqrt{T}} \\
+  \Delta\dot{N} = \frac{1}{T} \cdot \sqrt{N} \\
+                  = \frac{1}{T} \cdot \sqrt{\dot{N} \cdot T} \\
+                  = \frac{\sqrt{\dot{N}} \cdot \sqrt{T}}{\sqrt{T} \cdot \sqrt{T}} \\
                   = \sqrt{\frac{\dot{N}}{T}}
 \end{equation}
 
@@ -98,11 +98,11 @@ Deduced from (7) and known $\dot{D}_{C1}$ and $\dot{D}_{C2}$
 the uncertainty on (4) is estimated by 
 
 \begin{equation}
-  \Delta{m} = m * \sqrt{
+  \Delta{m} = m \cdot \sqrt{
     (\frac{\Delta\dot{D}_{C1}}{\dot{D}_{C1} - \dot{D}_{C2}})^2 +
     (\frac{\Delta\dot{D}_{C2}}{\dot{D}_{C1} - \dot{D}_{C2}})^2 +
-    (\frac{\Delta\dot{N}_{C1}}{\dot{N}_{C1} - \dot{N}_{C2}})^2 +
-    (\frac{\Delta\dot{N}_{C2}}{\dot{N}_{C1} - \dot{N}_{C2}})^2
+    (\frac{\Delta\dot{N'}_{C1}}{\dot{N'}_{C1} - \dot{N'}_{C2}})^2 +
+    (\frac{\Delta\dot{N'}_{C2}}{\dot{N'}_{C1} - \dot{N'}_{C2}})^2
   }
 \end{equation}
 
@@ -111,8 +111,8 @@ In consideration of (8) the uncertainty on (5) is estimated by
 \begin{equation}
   \Delta\dot{D}_0 = \sqrt{
     (\Delta\dot{D}_{C1})^2 +
-    (\dot{N'}_{C1} * \Delta{m})^2 +
-    (m * \Delta\dot{N'}_{C1})^2
+    (\dot{N'}_{C1} \cdot \Delta{m})^2 +
+    (m \cdot \Delta\dot{N'}_{C1})^2
   }
 \end{equation}
 
@@ -123,8 +123,8 @@ estimated in (1), is calculated with
 
 \begin{equation}
   \Delta\dot{D}_M = \sqrt{
-    (\dot{N'}_M * \Delta{m})^2 +
-    (m * \Delta{\dot{N'}_M})^2 +
+    (\dot{N'}_M \cdot \Delta{m})^2 +
+    (m \cdot \Delta{\dot{N'}_M})^2 +
     (\Delta\dot{D}_0)^2
   }
 \end{equation}
