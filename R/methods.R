@@ -1,17 +1,17 @@
 ####################################################################################################
 # methods for generic: plot()
 # ##################################################################################################
-#' methods
+#' Internal methods for base S3 generics
 #' 
 #' Methods for S3-generics implemented for the package 'gammaSpec'.
 #' This document summarises all implemented S3-generics.
 #' @param x object
 #' @param y currently not used
 #' @param ... Arguments to be passed to \code{\link{plot}}.
-#' @name methods
+#' @name Internal-methods
 NULL
 
-#' @rdname methods
+#' @rdname Internal-methods
 #' @method plot SPE
 #' @param type \code{\link{character}} (default: \code{"bar"}): 
 #' Options: \code{"bar", "line", "point"}
@@ -79,7 +79,7 @@ plot.SPE <- function(x, y,
   
 }
 
-#' @rdname methods
+#' @rdname Internal-methods
 #' @method plot MAC
 #' @export 
 plot.MAC <- function(x, y, ...) {
