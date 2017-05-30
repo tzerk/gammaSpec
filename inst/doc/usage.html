@@ -12,7 +12,7 @@
 
 <meta name="author" content="Christoph Burow" />
 
-<meta name="date" content="2017-05-22" />
+<meta name="date" content="2017-05-30" />
 
 <title>How to use this package - A basic example</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">How to use this package - A basic example</h1>
 <h4 class="author"><em>Christoph Burow</em></h4>
-<h4 class="date"><em>2017-05-22</em></h4>
+<h4 class="date"><em>2017-05-30</em></h4>
 
 
 <div id="TOC">
@@ -84,11 +84,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="preparation" class="section level2">
 <h2>Preparation</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gammaSpec)</code></pre></div>
+<pre><code>## 
+## Attaching package: 'gammaSpec'</code></pre>
+<pre><code>## The following object is masked _by_ '.GlobalEnv':
+## 
+##     read_SPE</code></pre>
 </div>
 <div id="importing-a-measured-spectrum" class="section level2">
 <h2>Importing a measured spectrum</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">spec &lt;-<span class="st"> </span><span class="kw">read_SPE</span>(<span class="dt">file =</span> <span class="st">&quot;path/to/my/file.Spe&quot;</span>)
 <span class="kw">str</span>(spec, <span class="dt">max.level =</span> <span class="dv">2</span>)</code></pre></div>
+<pre><code>## Warning in readLines(file): incomplete final line found on 'C:/Users/C/
+## Documents/R/win-library/3.5/gammaSpec/extdata/Nievenheim_DORNIE_1.spe'</code></pre>
 <pre><code>## List of 10
 ##  $ SPEC_ID  : chr &quot;profile&quot;
 ##  $ SPEC_REM : chr [1:3] &quot;DET# 1&quot; &quot;DETDESC# SFB806F2XFR digiBASE-RH SN 15121444&quot; &quot;AP# GammaVision Version 6.07&quot;

@@ -15,34 +15,34 @@ vignette: >
 
 # Dose rate estimation
 
-For a NaI:Tl detector the dose rate $\dot{D}_M$ from count rate $\dot{N'}_M$ can
+For a NaI:Tl detector the dose rate $\dot{D}_\mathrm{M}$ from count rate $\dot{N}^{'}_\mathrm{M}$ can
 be estimated using the following linear relationship
 
 \begin{equation}
-  \dot{D}_M = m \cdot \dot{N'}_M + \dot{D}_0
+  \dot{D}_\mathrm{M} = m \cdot \dot{N}^{'}_\mathrm{M} + \dot{D}_0
 \end{equation}
 
 with $m$ being the slope and $\dot{D}_0$ the intercept. Both these parameters must
 be estimated by calibration measurements, which must be representative for
 the designated use case (e.g. in terms of geometry, material and source spectrum). 
-The count rate $\dot{N'}_M$ is calculated from
+The count rate $\dot{N}^{'}_\mathrm{M}$ is calculated from
 
 \begin{equation}
-  \dot{N'}_M = \dot{N}_M - \dot{N}_B
+  \dot{N}^{'}_\mathrm{M} = \dot{N}_\mathrm{M} - \dot{N}_\mathrm{B}
 \end{equation}
 
-where the measured count rate $\dot{N}_M$ is subtracted a measured background
-count rate $\dot{N}_B$
+where the measured count rate $\dot{N}_\mathrm{M}$ is subtracted a measured background
+count rate $\dot{N}_\mathrm{B}$
 
 Both count rates are calculated with
 
 \begin{equation}
-  \dot{N} = \frac{N}{T} \\ = \frac{1}{T} \cdot \displaystyle\sum_{i=k}^{k'}N_i
+  \dot{N} = \frac{N}{T} = \frac{1}{T} \cdot \displaystyle\sum_{\mathrm{i}=\mathrm{k}}^{\mathrm{k}'}N_\mathrm{i}
 \end{equation}
 
-where $T$ is the measurement time and $N_i$ is the number of measured counts in the
-$i$th channel. The lowest summation index $k$ is set to a channel closest  
-to a corresponding energy $E$ = 500 keV, while index $k'$ is set to the channel closest to 
+where $T$ is the measurement time and $N_\mathrm{i}$ is the number of measured counts in the
+$i$th channel. The lowest summation index $\mathrm{k}$ is set to a channel closest
+to a corresponding energy $E$ = 500 keV, while index $\mathrm{k}'$ is set to the channel closest to 
 $E$ = 4 MeV. These default values were chosen as the differences in photon 
 interaction cross sections in quartz and NaI:Tl are smallest in this energy range and thus a 
 similar deposition of dose can be expected.
@@ -50,24 +50,24 @@ similar deposition of dose can be expected.
 # Calibration
 
 Parameters $m$ and $\dot{D}_0$ of (1) are estimated by separate calibration 
-measurements, where the count rates $\dot{N'}_{C1}$ and $\dot{N'}_{C2}$ of 
-two known dose rates $\dot{D}_{C1}$ and $\dot{D}_{C2}$ must be determined using
+measurements, where the count rates $\dot{N}^{'}_{\mathrm{C1}}$ and $\dot{N}^{'}_{\mathrm{C2}}$ of 
+two known dose rates $\dot{D}_{\mathrm{C1}}$ and $\dot{D}_{\mathrm{C2}}$ must be determined using
 (2) and (3). With these results the coefficients $m$ and $\dot{D}_0$ can be 
 calculated with
 
 \begin{equation}
-  m = \frac{\dot{D}_{C1} - \dot{D}_{C2}}{\dot{N'}_{C1} - \dot{N'}_{C2}}
+  m = \frac{\dot{D}_{\mathrm{C1}} - \dot{D}_{\mathrm{C2}}}{\dot{N}^{'}_{\mathrm{C1}} - \dot{N}^{'}_{\mathrm{C2}}}
 \end{equation}
 
 and
 
 \begin{equation}
-  \dot{D}_0 = \dot{D}_{C1} - m \cdot \dot{N'}_{C1}
+  \dot{D}_0 = \dot{D}_{\mathrm{C1}} - m \cdot \dot{N}^{'}_{\mathrm{C1}}
 \end{equation}
 
 As both count rates are background corrected the calibration curve can be
-expected to include the pair of values $\dot{D} = 0$ and $\dot{N'} = 0$. If only
-one calibration spectrum (i.e., $\dot{D}_{C1}$ and $\dot{N'}_{C1}$) is available 
+expected to include the pair of values $\dot{D} = 0$ and $\dot{N}^{'} = 0$. If only
+one calibration spectrum (i.e., $\dot{D}_{\mathrm{C1}}$ and $\dot{N}^{'}_{\mathrm{C1}}$) is available 
 one could simplify (1) by assuming intercept $\dot{D}_0 = 0$.
 
 # Estimating the uncertainty
@@ -87,22 +87,22 @@ Poisson statistics:
 For the uncertainty on (2) it follows
 
 \begin{equation}
-  \Delta\dot{N'}_M = \sqrt{(\Delta\dot{N}_M)^2 + (\Delta\dot{N}_B)^2}
+  \Delta\dot{N}^{'}_\mathrm{M} = \sqrt{(\Delta\dot{N}_\mathrm{M})^2 + (\Delta\dot{N}_\mathrm{B})^2}
 \end{equation}
 
 which can also analogously be applied to all other count rates.
 
 ## Calibration
 
-Deduced from (7) and known $\dot{D}_{C1}$ and $\dot{D}_{C2}$ 
+Deduced from (7) and known $\dot{D}_{\mathrm{C1}}$ and $\dot{D}_{\mathrm{C2}}$ 
 the uncertainty on (4) is estimated by 
 
 \begin{equation}
   \Delta{m} = m \cdot \sqrt{
-    (\frac{\Delta\dot{D}_{C1}}{\dot{D}_{C1} - \dot{D}_{C2}})^2 +
-    (\frac{\Delta\dot{D}_{C2}}{\dot{D}_{C1} - \dot{D}_{C2}})^2 +
-    (\frac{\Delta\dot{N'}_{C1}}{\dot{N'}_{C1} - \dot{N'}_{C2}})^2 +
-    (\frac{\Delta\dot{N'}_{C2}}{\dot{N'}_{C1} - \dot{N'}_{C2}})^2
+    (\frac{\Delta\dot{D}_{\mathrm{C1}}}{\dot{D}_{\mathrm{C1}} - \dot{D}_{\mathrm{C2}}})^2 +
+    (\frac{\Delta\dot{D}_{\mathrm{C2}}}{\dot{D}_{\mathrm{C1}} - \dot{D}_{\mathrm{C2}}})^2 +
+    (\frac{\Delta\dot{N}^{'}_{\mathrm{C1}}}{\dot{N}^{'}_{\mathrm{C1}} - \dot{N}^{'}_{\mathrm{C2}}})^2 +
+    (\frac{\Delta\dot{N}^{'}_{\mathrm{C2}}}{\dot{N}^{'}_{\mathrm{C1}} - \dot{N}^{'}_{\mathrm{C2}}})^2
   }
 \end{equation}
 
@@ -110,21 +110,21 @@ In consideration of (8) the uncertainty on (5) is estimated by
 
 \begin{equation}
   \Delta\dot{D}_0 = \sqrt{
-    (\Delta\dot{D}_{C1})^2 +
-    (\dot{N'}_{C1} \cdot \Delta{m})^2 +
-    (m \cdot \Delta\dot{N'}_{C1})^2
+    (\Delta\dot{D}_{\mathrm{C1}})^2 +
+    (\dot{N}^{'}_{\mathrm{C1}} \cdot \Delta{m})^2 +
+    (m \cdot \Delta\dot{N}^{'}_{\mathrm{C1}})^2
   }
 \end{equation}
 
 ## Measured dose rate
 
-Finally, with (8) and (9) the uncertainty on the measured dose rate $\dot{D}_M$,
+Finally, with (8) and (9) the uncertainty on the measured dose rate $\dot{D}_\mathrm{M}$,
 estimated in (1), is calculated with
 
 \begin{equation}
-  \Delta\dot{D}_M = \sqrt{
-    (\dot{N'}_M \cdot \Delta{m})^2 +
-    (m \cdot \Delta{\dot{N'}_M})^2 +
+  \Delta\dot{D}_\mathrm{M} = \sqrt{
+    (\dot{N}^{'}_\mathrm{M} \cdot \Delta{m})^2 +
+    (m \cdot \Delta{\dot{N}^{'}_\mathrm{M}})^2 +
     (\Delta\dot{D}_0)^2
   }
 \end{equation}
