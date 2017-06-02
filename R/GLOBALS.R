@@ -30,7 +30,7 @@ get_EnergyThreshold <- function() {
 # This is the dose rate of the reference spectrum used for calibration (Gy/ka)
 # 2017_04 Weimar bloc 10000s.Spe
 get_SpecDoseRate <- function() {
-  c(1.315, 0.1) #TODO: ASK T. SCHÜLER FOR PRECISE GAMMA DOSE RATE
+  c(1.244673, 0.03582226) #TODO: ASK T. SCHÜLER FOR PRECISE GAMMA DOSE RATE
 }
 
 ## MISCALLENOUS ----
