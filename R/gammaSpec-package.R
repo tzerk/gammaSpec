@@ -25,10 +25,11 @@ NULL
 #' @name MassAttenuationCoefficients
 #' @docType data
 #' @format A \code{\link{list}} with two elements (\code{\link{data.frame}s})
-#' with two columns (\code{energy_MeV, attenuation_cm2g}: \cr
+#' with two columns (\code{energy_MeV, attenuation_cm2g}): \cr
+#' 
 #' \tabular{ll}{
 #' $NaI \tab Total attenuation for sodium iodide \cr
-#' $SiO2 \tab Total attenuation for silicon dioxide \cr
+#' $SiO2 \tab Total attenuation for silicon dioxide
 #' }
 #' 
 #' @source 
