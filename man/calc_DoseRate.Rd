@@ -4,9 +4,9 @@
 \alias{calc_DoseRate}
 \title{Estimate the in-situ wet gamma dose rate}
 \usage{
-calc_DoseRate(data, energy.min = get_EnergyThreshold(), energy.max = NULL,
-  background.correction = TRUE, plot = TRUE, plot.combine = TRUE,
-  app = FALSE, ...)
+calc_DoseRate(data, energy.min = get_EnergyThreshold(),
+  energy.max = NULL, background.correction = TRUE, plot = TRUE,
+  plot.combine = TRUE, app = FALSE, ...)
 }
 \arguments{
 \item{data}{\bold{required}: 
@@ -57,7 +57,7 @@ res <- calc_DoseRate(data = spec,
                      energy.max = 2000,
                      background.correction = TRUE,
                      plot = TRUE,
-                     plot.combine = TRUE,
+                     plot.combine = FALSE,
                      verbose = TRUE)
                      
 print(res$summary)

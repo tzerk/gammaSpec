@@ -49,7 +49,7 @@
 #'                      energy.max = 2000,
 #'                      background.correction = TRUE,
 #'                      plot = TRUE,
-#'                      plot.combine = TRUE,
+#'                      plot.combine = FALSE,
 #'                      verbose = TRUE)
 #'                      
 #' print(res$summary)
