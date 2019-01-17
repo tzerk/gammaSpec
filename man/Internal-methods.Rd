@@ -7,8 +7,8 @@
 \title{Internal methods for base S3 generics}
 \usage{
 \method{plot}{SPE}(x, y, type = c("bar", "line", "point"),
-  xval = c("energy", "channel"), yval = c("rate", "count"), info = TRUE,
-  fill = FALSE, ...)
+  xval = c("energy", "channel"), yval = c("rate", "count"),
+  info = TRUE, fill = FALSE, ...)
 
 \method{plot}{MAC}(x, y, ...)
 }

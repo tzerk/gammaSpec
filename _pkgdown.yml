@@ -1,0 +1,14 @@
+navbar:
+  title: "gammaSpec"
+  left:
+    - icon: fa-home
+      text: "Home"
+      href: index.html
+    - text: "Functions"
+      href: reference/index.html
+    - text: "Articles"
+      href: articles/index.html
+  right:
+    - icon: fa-github
+      text: "GitHub"
+      href: https://github.com/tzerk/gammaSpec
