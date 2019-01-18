@@ -32,4 +32,3 @@ packrat/src/
 src/*.o
 src/*.dll
 misc/
-README-*.png

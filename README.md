@@ -5,6 +5,10 @@
 
 <!-- badges: start -->
 
+[![Build
+Status](https://travis-ci.org/tzerk/gammaSpec.svg?branch=master)](https://travis-ci.org/tzerk/gammaSpec)
+[![Build
+status](https://ci.appveyor.com/api/projects/status/kgrhm1tni43qohm1?svg=true)](https://ci.appveyor.com/project/tzerk/gammaspec)
 <!-- badges: end -->
 
 > [Find a full documentation of the package on the project
@@ -72,7 +76,7 @@ plot(spectrum,
      info = TRUE, fill = FALSE)
 ```
 
-![](README-spec_plot-1.png)<!-- -->
+![](man/figures/README-spec_plot-1.png)<!-- -->
 
 ### Estimating the gamma dose rate
 
@@ -98,7 +102,7 @@ res <- calc_DoseRate(data = spectrum,
 #>  0.884 ± 0.069
 ```
 
-![](README-doserate-1.png)<!-- -->
+![](man/figures/README-doserate-1.png)<!-- -->
 
 ### Shiny application
 
