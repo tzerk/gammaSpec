@@ -1,3 +1,5 @@
+^Meta$
+^doc$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 LICENSE$
@@ -15,5 +17,5 @@ inst/extdata/misc/
 docs/
 _pkgdown.yml$
 /man/figures/
-^.*.Rmd$
+README\.Rmd
 pkgdown/
