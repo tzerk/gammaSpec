@@ -15,7 +15,7 @@ BugReports: https://github.com/tzerk/gammaSpec/issues
 LazyData: TRUE
 Encoding: UTF-8
 Depends:
-    R (>= 3.3.2)
+    R (>= 3.5.0)
 Suggests:
     shiny (>= 1.0.3),
     testthat (>= 1.0.2),
