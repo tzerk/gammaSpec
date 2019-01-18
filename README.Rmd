@@ -115,4 +115,4 @@ This version is a development version and it comes without any guarentee!
 
 The gammaSpec package is licensed under the GPLv3. See these files in the main directory for additional details:
 
-* LICENSE - ESR package license (GPLv3)
+* LICENSE - gammaSpec package license (GPLv3)
