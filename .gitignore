@@ -20,7 +20,6 @@ vignettes/*.pdf
 /.Rproj.user/*
 *.Rhistory
 *.Rproj
-*.Rbuildignore
 *.DS_Store
 .Rproj.user
 .Rprofile
